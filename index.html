@@ -14,7 +14,6 @@
   import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
   import { ARButton } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/webxr/ARButton.js';
 
-  // Scene, Camera, Renderer
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.01, 100);
 
@@ -23,46 +22,39 @@
   renderer.xr.enabled = true;
   document.body.appendChild(renderer.domElement);
 
-  // Add AR button (shows only if AR is supported)
   document.body.appendChild(ARButton.createButton(renderer, { requiredFeatures: ['hit-test'] }));
 
-  // Lighting
   const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
   scene.add(light);
 
-  // GLTF Loader
   const loader = new GLTFLoader();
 
-  // Model 1: Damaged Helmet
   loader.load(
     'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf',
     gltf => {
       gltf.scene.scale.set(0.5, 0.5, 0.5);
-      gltf.scene.position.set(0, 0, -1); // 1m in front
+      gltf.scene.position.set(0, 0, -1);
       scene.add(gltf.scene);
     },
     undefined,
     error => console.error('Error loading Helmet:', error)
   );
 
-  // Model 2: Duck
   loader.load(
     'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf',
     gltf => {
       gltf.scene.scale.set(0.5, 0.5, 0.5);
-      gltf.scene.position.set(0.5, 0, -1); // offset to the side
+      gltf.scene.position.set(0.5, 0, -1);
       scene.add(gltf.scene);
     },
     undefined,
     error => console.error('Error loading Duck:', error)
   );
 
-  // Render Loop with WebXR
   renderer.setAnimationLoop(() => {
     renderer.render(scene, camera);
   });
 
-  // Resize
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
