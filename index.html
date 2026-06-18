@@ -23,7 +23,7 @@
   renderer.xr.enabled = true;
   document.body.appendChild(renderer.domElement);
 
-  // Add AR button
+  // Add AR button (shows only if AR is supported)
   document.body.appendChild(ARButton.createButton(renderer, { requiredFeatures: ['hit-test'] }));
 
   // Lighting
@@ -34,20 +34,28 @@
   const loader = new GLTFLoader();
 
   // Model 1: Damaged Helmet
-  loader.load('https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf',
+  loader.load(
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf',
     gltf => {
       gltf.scene.scale.set(0.5, 0.5, 0.5);
       gltf.scene.position.set(0, 0, -1); // 1m in front
       scene.add(gltf.scene);
-    });
+    },
+    undefined,
+    error => console.error('Error loading Helmet:', error)
+  );
 
   // Model 2: Duck
-  loader.load('https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf',
+  loader.load(
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf',
     gltf => {
       gltf.scene.scale.set(0.5, 0.5, 0.5);
       gltf.scene.position.set(0.5, 0, -1); // offset to the side
       scene.add(gltf.scene);
-    });
+    },
+    undefined,
+    error => console.error('Error loading Duck:', error)
+  );
 
   // Render Loop with WebXR
   renderer.setAnimationLoop(() => {
